@@ -1,40 +1,35 @@
-import React, { useState } from "react";
+// src/components/AddTodo.tsx
+import React, { useState, useContext } from "react";
+import { TodoContext } from "../ContextStore/TodoContext";
 
+const AddTodo: React.FC = () => {
+  const [text, setText] = useState("");
+  const todoContext = useContext(TodoContext);
 
-type AddTodoType = {
-    id: number;
-    text: string;
-}
-
-const AddTodo = () => {
-  const [addTodo, setAddTodo] = useState<string>("");
-  const [todo, setTodo] = useState<AddTodoType[]>([])
-  
-
-  const handleSubmit = () => {
-    
-    const newTodo:AddTodoType = {
-        id: todo.length + 1,
-        text: String(addTodo)
-    }
-    
-    setTodo([...todo, newTodo])
+  if (!todoContext) {
+    return null;
   }
 
+  const { addTodo } = todoContext;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (text.trim()) {
+      addTodo(text);
+      setText("");
+    }
+  };
+
   return (
-    <>
-      <div>
-        <input
-          type="text"
-          value={addTodo}
-          placeholder="Enter Your ToDo Here"
-          onChange={(e) => {
-            setAddTodo(String(e.target.value));
-          }}
-        />
-        <button onSubmit={handleSubmit}>Add</button>
-      </div>
-    </>
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder="Add a new todo"
+      />
+      <button type="submit">Add Todo</button>
+    </form>
   );
 };
 

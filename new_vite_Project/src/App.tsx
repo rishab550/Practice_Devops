@@ -1,16 +1,12 @@
+// src/App.tsx
 import React from "react";
-import AddTodo from "./components/AddTodo";
-import TodoList from "./components/TodoList";
+import TodoApp from "./components/TodoApp";
 
-const App = () => {
+const App: React.FC = () => {
   return (
-    <>
-      <div>
-        <h1>To-Do-App</h1>
-        <AddTodo />
-        <TodoList />
-      </div>
-    </>
+    <div className="App">
+      <TodoApp />
+    </div>
   );
 };
 

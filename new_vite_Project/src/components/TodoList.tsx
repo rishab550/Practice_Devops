@@ -1,15 +1,23 @@
-import React from "react";
+// src/components/TodoList.tsx
+import React, { useContext } from "react";
+import { TodoContext } from "../ContextStore/TodoContext";
+import TodoItem from "../components/TodoItem";
 
-const TodoList = () => {
+const TodoList: React.FC = () => {
+  const todoContext = useContext(TodoContext);
+
+  if (!todoContext) {
+    return null;
+  }
+
+  const { todos } = todoContext;
+
   return (
-    <>
-      <div>
-        <p>1</p>
-        <p>Your ToDo Here</p>
-        <button>Delete</button>
-        <button>Edit</button>
-      </div>
-    </>
+    <ul>
+      {todos.map((todo) => (
+        <TodoItem key={todo.id} todo={todo} />
+      ))}
+    </ul>
   );
 };
 

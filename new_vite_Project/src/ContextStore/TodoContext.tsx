@@ -1,21 +1,50 @@
-import { createContext } from "react";
+// src/context/TodoContext.tsx
+import React, { createContext, useState, FC, ReactNode } from "react";
+import { Todo, TodoContextType } from "./types";
 
+// // src/context/types.ts
+// export interface Todo {
+//   id: number;
+//   text: string;
+//   completed: boolean;
+// }
 
-const TodoContextStore = createContext<>();
+// export interface TodoContextType {
+//   todos: Todo[];
+//   addTodo: (text: string) => void;
+//   toggleTodo: (id: number) => void;
+//   removeTodo: (id: number) => void;
+// }
 
-const TodoProvider = ({ children }: { children: ReactNode }) => {
-  return <TodoContext.Provider value={}>{children}</TodoContext.Provider>;
-};
+export const TodoContext = createContext<TodoContextType | undefined>(
+  undefined
+);
 
-const TodoContext = () => {
+const TodoProvider: FC<{ children: ReactNode }> = ({ children }) => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+
+  const addTodo = (text: string) => {
+    const newTodo = { id: Date.now(), text, completed: false };
+    setTodos((prevTodos) => [...prevTodos, newTodo]);
+  };
+
+  const toggleTodo = (id: number) => {
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      )
+    );
+  };
+
+  const removeTodo = (id: number) => {
+    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
+  };
+
   return (
-    <>
-      <TodoProvider>
-        <div>TodoContext</div>
-      </TodoProvider>
-    </>
+    <TodoContext.Provider value={{ todos, addTodo, toggleTodo, removeTodo }}>
+      {children}
+    </TodoContext.Provider>
   );
 };
 
-
-export default TodoContext
+export default TodoProvider;
